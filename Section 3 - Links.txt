@@ -1,0 +1,26 @@
+Install Docker Desktop on Mac:
+https://docs.docker.com/desktop/setup/install/mac-install/
+
+
+Install Docker Engine on Ubuntu:
+https://docs.docker.com/engine/install/ubuntu/
+
+
+Linux post-installation steps for Docker Engine:
+https://docs.docker.com/engine/install/linux-postinstall/
+
+
+Install Docker Desktop on Windows:
+https://docs.docker.com/desktop/setup/install/windows-install/
+
+
+Play with Docker:
+https://www.docker.com/play-with-docker/
+
+
+Download Node.js:
+https://nodejs.org/en/download/package-manager
+
+
+Download Postman:
+https://www.postman.com/downloads/
