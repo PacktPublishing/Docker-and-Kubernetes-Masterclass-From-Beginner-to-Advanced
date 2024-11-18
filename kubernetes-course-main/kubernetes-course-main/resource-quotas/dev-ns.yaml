@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  namespace: dev
+  name: dev-quota
+spec:
+  hard:
+    requests.cpu: '2'
+    requests.memory: '2Gi'
+    limits.cpu: '4'
+    limits.memory: '4Gi'

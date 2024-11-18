@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prod-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: color-api-prod
+    kubernetes.io/ingress.class: 'gce'
+    networking.gke.io/managed-certificates: prod-mc
+spec:
+  rules:
+    - host: socolourful.com
+      http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: color-svc-np
+                port:
+                  number: 80
+    - host: www.socolourful.com
+      http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: color-svc-np
+                port:
+                  number: 80

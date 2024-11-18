@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-external
+spec:
+  podSelector:
+    matchLabels:
+      app: color-api
+  policyTypes:
+    - Ingress
+  ingress:
+    - {}

@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - nginx-depl.yaml
+  - nginx-svc.yaml
+  - reverse-proxy-depl.yaml
+  - reverse-proxy-pod.yaml

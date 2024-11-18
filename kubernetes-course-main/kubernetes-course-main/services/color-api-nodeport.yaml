@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: color-api-nodeport
+  labels:
+    app: color-api
+spec:
+  type: NodePort
+  selector:
+    app: color-api
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30007

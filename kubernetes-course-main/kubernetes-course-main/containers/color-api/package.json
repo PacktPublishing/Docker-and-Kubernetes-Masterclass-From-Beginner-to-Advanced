@@ -1,0 +1,19 @@
+{
+  "name": "color-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "body-parser": "1.20.3",
+    "express": "4.19.2",
+    "express-prom-bundle": "7.0.0",
+    "mongoose": "8.6.3"
+  }
+}

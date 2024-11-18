@@ -1,0 +1,47 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+namePrefix: dev-
+nameSuffix: -alpha
+
+commonLabels:
+  project: ecommerce-app
+  tier: backend
+  env: dev
+
+commonAnnotations:
+  team: finance
+  maintainer: 'finance@ourcompany.org'
+  repository: 'git-repo'
+
+replicas:
+  - name: nginx
+    count: 2
+
+configMapGenerator:
+  - name: feature-flag-config
+    literals:
+      - use_db=true
+      - expose_metrics=true
+      - some_other_feature=true
+  - name: db-init-config
+    files:
+      - db-init.js
+
+secretGenerator:
+  - name: local-config
+    envs:
+      - .env.local
+    type: Opaque
+
+patches:
+  - path: use-latest-tag.patch.yaml
+  - path: mount-db-init.patch.yaml
+  - path: remove-resources.patch.json
+    target:
+      group: apps
+      version: v1
+      kind: Deployment

@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  namespace: dev
+  labels:
+    name: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.27.0
+      resources:
+        limits:
+          memory: '128Mi'
+          cpu: '500m'
+      ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  namespace: prod
+  labels:
+    name: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.27.0
+      resources:
+        limits:
+          memory: '128Mi'
+          cpu: '500m'
+      ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-curl
+  namespace: dev
+  labels:
+    name: alpine-curl
+spec:
+  serviceAccountName: pod-inspector
+  containers:
+    - name: curl
+      image: lmacademy/alpine-curl:1.0.0
+      resources:
+        limits:
+          memory: '128Mi'
+          cpu: '500m'
+      ports:
+        - containerPort: 80

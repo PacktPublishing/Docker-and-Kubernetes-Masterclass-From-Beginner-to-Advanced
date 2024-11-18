@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: reverse-proxy-pod
+  labels:
+    app: reverse-proxy-standalone
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.27.0
+      resources:
+        limits:
+          memory: '128Mi'
+          cpu: '500m'
+      ports:
+        - containerPort: 80

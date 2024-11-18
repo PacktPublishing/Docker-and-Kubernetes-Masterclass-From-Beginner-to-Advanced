@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: color-api-depl
+  namespace: dev
+  labels:
+    app: color-api
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: color-api
+  template:
+    metadata:
+      labels:
+        app: color-api
+    spec:
+      containers:
+        - name: color-api
+          image: lmacademy/color-api:1.1.0
+          resources:
+            requests:
+              cpu: '200m'
+              memory: '256Mi'
+            limits:
+              cpu: '500m'
+              memory: '512Mi'
+          ports:
+            - containerPort: 80

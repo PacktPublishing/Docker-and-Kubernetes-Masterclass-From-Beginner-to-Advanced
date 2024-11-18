@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: green-env-vars
+data:
+  COLOR_CONFIG_PATH: /mnt/config/color.txt
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: green-files
+data:
+  color.txt: green
+  hello-from-green.js: |
+    console.log("Hello from")
+    console.log("The green config map")

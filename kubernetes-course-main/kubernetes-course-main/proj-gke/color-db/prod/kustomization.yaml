@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: prod
+
+resources:
+  - ../_base
+
+patches:
+  - path: use-premium-storage.yaml
+    target:
+      version: v1
+      group: apps
+      kind: StatefulSet

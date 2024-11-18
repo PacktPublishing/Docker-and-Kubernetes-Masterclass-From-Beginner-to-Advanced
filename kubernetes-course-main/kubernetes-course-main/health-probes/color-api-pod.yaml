@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: color-api-pod
+  labels:
+    name: color-api-pod
+spec:
+  containers:
+    - name: color-api-pod
+      image: lmacademy/color-api:1.2.1
+      ports:
+        - containerPort: 80
+      resources:
+        limits:
+          cpu: '500m'
+          memory: '512Mi'
+      env:
+        - name: DELAY_STARTUP
+          value: 'false'
+        - name: FAIL_LIVENESS
+          value: 'false'
+      startupProbe:
+        httpGet:
+          path: /up
+          port: 80
+        failureThreshold: 2
+        periodSeconds: 3
+      livenessProbe:
+        httpGet:
+          path: /health
+          port: 80
+        failureThreshold: 3
+        periodSeconds: 10

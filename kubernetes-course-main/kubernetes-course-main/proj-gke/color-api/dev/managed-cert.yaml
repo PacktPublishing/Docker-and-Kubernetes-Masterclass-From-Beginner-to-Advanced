@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: dev-mc
+spec:
+  domains:
+    - dev.socolourful.com

@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-curl
+spec:
+  podSelector:
+    matchLabels:
+      app: color-api
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: dev
+          podSelector:
+            matchLabels:
+              app: traffic-generator
+        - podSelector:
+            matchLabels:
+              app: curl

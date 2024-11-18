@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: color-ss
+spec:
+  selector:
+    matchLabels:
+      app: color-api
+  serviceName: color-svc
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: color-api
+    spec:
+      containers:
+        - name: color-api
+          image: lmacademy/color-api:1.2.1
+          ports:
+            - containerPort: 80
+              name: web
+          volumeMounts:
+            - name: dummy-data
+              mountPath: /tmp/data
+  volumeClaimTemplates:
+    - metadata:
+        name: dummy-data
+      spec:
+        accessModes: ['ReadWriteOnce']
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 1Gi

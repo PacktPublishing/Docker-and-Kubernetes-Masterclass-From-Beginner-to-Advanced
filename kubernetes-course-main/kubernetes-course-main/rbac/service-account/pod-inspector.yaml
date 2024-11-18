@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: default
+  name: pod-inspector
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: dev
+  name: pod-inspector

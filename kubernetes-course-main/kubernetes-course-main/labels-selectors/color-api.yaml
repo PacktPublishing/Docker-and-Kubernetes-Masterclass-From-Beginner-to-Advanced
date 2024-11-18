@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: color-backend
+  labels:
+    app: color-api
+    environment: local
+    tier: backend
+spec:
+  containers:
+    - name: color-backend
+      image: lmacademy/color-api:1.1.0
+      ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: color-frontend
+  labels:
+    app: color-api
+    environment: local
+    tier: frontend
+spec:
+  containers:
+    - name: color-nginx
+      image: nginx:1.27.0
+      ports:
+        - containerPort: 80

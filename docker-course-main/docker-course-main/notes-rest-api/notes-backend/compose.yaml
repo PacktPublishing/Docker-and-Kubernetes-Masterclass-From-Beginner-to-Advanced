@@ -1,0 +1,41 @@
+name: notes-backend
+
+services:
+  notes:
+    build:
+      context: .
+      target: development
+    ports:
+      - 3001:80
+    environment:
+      - PORT=80
+      - DB_URL=mongodb://${NOTES_DB_USER}:${NOTES_DB_PASSWORD}@notes-db/${NOTES_DB_NAME}
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+    networks:
+      - notes-net
+    depends_on:
+      - notes-db
+  notes-db:
+    image: mongodb/mongodb-community-server:7.0-ubuntu2204
+    env_file:
+      - .env
+    volumes:
+      - type: volume
+        source: notes-data
+        target: /data/db
+      - type: bind
+        source: ./db-config/mongo-init.js
+        target: /docker-entrypoint-initdb.d/mongo-init.js
+        read_only: true
+    networks:
+      - notes-net
+
+volumes:
+  notes-data:
+
+networks:
+  notes-net:

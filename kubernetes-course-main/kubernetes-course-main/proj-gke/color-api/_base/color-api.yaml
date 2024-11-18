@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: color-api
+spec:
+  selector:
+    matchLabels:
+      app: color-api
+  template:
+    metadata:
+      labels:
+        app: color-api
+    spec:
+      containers:
+        - name: color-api
+          image: lmacademy/color-api:2.0.0
+          resources:
+            requests:
+              memory: '64Mi'
+              cpu: '250m'
+            limits:
+              memory: '128Mi'
+              cpu: '500m'
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: USERNAME
+                  name: mongodb-colordb-creds
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PASSWORD
+                  name: mongodb-colordb-creds
+            - name: DB_URL
+              value: 'mongodb://$(DB_USER):$(DB_PASSWORD)@mongodb-ss-0.mongodb-svc:27017/colordb'
+          ports:
+            - containerPort: 80

@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  template:
+    spec:
+      containers:
+        - name: nginx
+          volumeMounts:
+            - name: db-config
+              mountPath: /db/config
+      volumes:
+        - name: db-config
+          configMap:
+            name: db-init-config
