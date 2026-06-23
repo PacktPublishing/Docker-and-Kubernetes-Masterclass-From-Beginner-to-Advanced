@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    metric_relabel_configs:
+      - target_label: service
+        replacement: redis
+      - target_label: namespace
+        replacement: app
+
+  - job_name: 'kube-state-metrics'
+    static_configs:
+      - targets: ['kube-state-metrics:8080']

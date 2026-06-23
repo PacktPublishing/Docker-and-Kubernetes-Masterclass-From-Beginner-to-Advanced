@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:8.6.0-alpine
+          ports:
+            - containerPort: 6379
+          resources:
+            requests:
+              cpu: 50m
+              memory: 512Mi
+            limits:
+              cpu: 200m
+              memory: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  selector:
+    app.kubernetes.io/name: redis
+  ports:
+    - port: 6379
+      targetPort: 6379
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis-exporter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: redis-exporter
+    spec:
+      containers:
+        - name: redis-exporter
+          image: oliver006/redis_exporter:v1.81.0-alpine
+          env:
+            - name: REDIS_ADDR
+              value: redis://redis:6379
+            - name: REDIS_EXPORTER_CHECK_SINGLE_KEYS
+              value: 'translation:queue'
+          ports:
+            - containerPort: 9121
+          resources:
+            requests:
+              cpu: 20m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-exporter
+spec:
+  selector:
+    app.kubernetes.io/name: redis-exporter
+  ports:
+    - port: 9121
+      targetPort: 9121

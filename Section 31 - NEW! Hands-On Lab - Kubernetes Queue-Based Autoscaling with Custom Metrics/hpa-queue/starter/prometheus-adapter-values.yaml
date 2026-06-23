@@ -1,0 +1,28 @@
+# prometheus-adapter Helm values
+#
+# Configures the adapter to point at Prometheus and exposes the Redis queue
+# depth as a named custom metric: translation_queue_length
+#
+# The metric_relabel_configs in prometheus-config.yaml add service="redis" and
+# namespace="app" labels to all redis-exporter metrics. This is what allows the
+# adapter to match the Prometheus series to the Kubernetes redis Service object.
+
+prometheus:
+  url: http://prometheus.app.svc
+  port: 9090
+
+rules:
+  # Suppress the default CPU/memory rules — this cluster uses metrics-server
+  # for those and does not need prometheus-adapter to duplicate them.
+  default: false
+
+  custom:
+    - seriesQuery: '{__name__="redis_key_size",namespace="app",service="redis"}'
+      resources:
+        overrides:
+          namespace: { resource: namespace }
+          service: { resource: service }
+      name:
+        matches: 'redis_key_size'
+        as: 'translation_queue_length'
+      metricsQuery: 'redis_key_size{key="translation:queue",<<.LabelMatchers>>}'

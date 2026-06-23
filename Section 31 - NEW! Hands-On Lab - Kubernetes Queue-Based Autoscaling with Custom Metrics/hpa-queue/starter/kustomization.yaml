@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: app
+
+resources:
+  - namespace.yaml
+  - frontend.yaml
+  - worker.yaml
+  - redis.yaml
+  - prometheus.yaml
+  - kube-state-metrics.yaml
+  - grafana.yaml
+
+configMapGenerator:
+  - name: prometheus-config
+    files:
+      - prometheus-config.yaml
+  - name: grafana-datasources
+    files:
+      - grafana-datasources.yaml
+  - name: grafana-dashboard-provisioner
+    files:
+      - grafana-dashboard-provisioner.yaml
+  - name: grafana-dashboard
+    files:
+      - grafana-dashboard.json

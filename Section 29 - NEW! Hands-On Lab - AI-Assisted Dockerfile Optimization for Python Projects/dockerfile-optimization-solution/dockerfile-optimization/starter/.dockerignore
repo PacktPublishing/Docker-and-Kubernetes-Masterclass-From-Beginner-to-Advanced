@@ -1,0 +1,17 @@
+# Prevents leaking version control history into the build context and image
+.git
+.gitignore
+
+# Byte-compiled files are regenerated at runtime; excluding them keeps the context clean
+__pycache__
+*.pyc
+*.pyo
+
+# Local environment files may contain secrets — must never reach the build context
+.env
+*.env
+
+# Editor and OS noise
+.DS_Store
+.vscode
+*.swp

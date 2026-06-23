@@ -1,0 +1,34 @@
+# Pinned to a specific minor version on the slim variant — reproducible builds, ~150 MB vs ~1 GB for the full image
+FROM python:3.12-slim
+
+# git, vim, and build-essential removed — not needed at runtime, reduce attack surface and image size
+# --no-install-recommends avoids pulling in extra suggested packages
+# Cache lists removed in the same layer — splitting into a separate RUN would commit the lists to an earlier layer
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Dependency manifest copied first — pip install layer is cached until requirements.txt changes, not on every source file change
+COPY requirements.txt .
+
+# --no-cache-dir prevents pip from storing downloaded wheels inside the image layer
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Application source copied after dependencies — any app change no longer busts the pip install cache
+COPY . .
+
+EXPOSE 5000
+
+# Non-root user for K8s hardening — some clusters enforce this via PodSecurityAdmission
+RUN addgroup --system appuser && adduser --system --ingroup appuser appuser
+USER appuser
+
+# HEALTHCHECK for local dev parity — on K8s, configure liveness/readiness probes in the Deployment manifest instead
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:5000/health || exit 1
+
+# FLASK_ENV, DEBUG, and SECRET_KEY removed — inject at runtime via K8s env fields or Secrets; never bake into the image
+# gunicorn replaces the Werkzeug dev server — production WSGI server, handles concurrent requests
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "app:app"]
